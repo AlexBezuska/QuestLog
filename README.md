@@ -7,19 +7,18 @@ This repo is on:
 
 ## Quick Start Guide
 
-1.  Clone this repo with the name you want for your website ex.
-    `git clone https://gitlab.com/AlexBezuska/quest-log your-blog-name-here`
+1.  Download [Quest Log zip file](https://github.com/AlexBezuska/quest-log/archive/master.zip) and extract it's contents into a folder
 
-2.  Navigate to the folder the last command created
+2.  Navigate inside the folder in your terminal
 
 3.  From the root folder of your site you can generate a post using the `add-post` command
-    \*Note: you can use this command in two ways, but we will start with creating a post with today's date. To create a post for a different day see the Retroposting setion\*\*
+    *Note: you can use this command in two ways, but we will start with creating a post with today's date. To create a post for a different day see the Retro-posting section*
 
 ```bash
 npm run add-post today "Hello World"
 ```
 
-The scructure of the command has 3 parts:  
+The structure of the command has 3 parts:  
 The add-post command: `npm run add-post`  
 Telling  Quest Log to use today's date: `today`  
 and finally the title of your new post(in quotes): `"Hello World"`  
