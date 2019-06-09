@@ -31,6 +31,9 @@ function buildBlog() {
   copyFolder("css");
   copyFolder("images");
   copyFolder("fonts");
+copyFavicons();
+
+
   data = addPageData(createData());
 
 
@@ -43,6 +46,18 @@ function buildBlog() {
   compilePosts(data);
 }
 
+function copyFavicons(){
+  favicons = ["android-chrome-192x192.png",
+	"android-chrome-512x512.png",
+	"apple-touch-icon.png",
+	"favicon-16x16.png",
+	"favicon-32x32.png",
+	"favicon.ico",
+	"site.webmanifest"];
+  favicons.forEach((favicon) => {
+    fs.copyFileSync(path.join(src, favicon), path.join(dest, favicon));
+  });
+}
 
 function copyFolder(name) {
   makeDirIfNotExist(path.join(dest, name));
