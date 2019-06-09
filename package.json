@@ -1,12 +1,11 @@
 {
   "name": "quest-log",
-  "version": "0.0.3",
+  "version": "1.0.12",
   "description": "A simple NodeJS CLI + Markdown static blog engine that uses standard Jekyll Markdown format, Handlebars for templating, and features convenient command line tools.",
-  "main": "quest-log.js",
-  "scripts": {
-    "start": "node quest-log",
-    "add-post": "node addpost",
-    "serve": "cd dest && python -m SimpleHTTPServer 8000"
+  "bin": {
+    "quest-log-install": "bin/install.js",
+    "quest-log-build": "bin/build.js",
+    "quest-log-post": "bin/post.js"
   },
   "homepage": "https://gitlab.com/AlexBezuska/quest-log",
   "repository": {
@@ -26,8 +25,8 @@
     "url": "http://alexbezuska.com"
   },
   "license": "MIT",
-  "devDependencies": {
-    "copy-dir": "^0.3.0",
+  "dependencies": {
+    "copy-dir": "^1.1.0",
     "handlebars": "^4.1.2",
     "lodash": "^4.17.11",
     "markdown": "^0.5.0",
@@ -35,6 +34,7 @@
     "moment": "^2.22.2",
     "node-sass": "^4.11.0",
     "rimraf": "^2.6.3",
+    "shelljs": "^0.8.3",
     "yaml-front-matter": "^4.0.0"
   }
 }

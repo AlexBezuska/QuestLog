@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 const fs = require("fs");
 const path = require("path");
 const marked = require("marked");
@@ -12,12 +14,12 @@ handlebars.registerHelper("raw", function(options) {
   return options.fn(this).replace(/\[\[/g, '{{').replace(/\]\]/g, '}}');
 });
 
-const package = require("./package.json");
-const config = require("./config.json");
-const site = require("./site.json");
+const package = require(path.join(__dirname, "../package.json"));
+const config = require(path.join(__dirname, "../config.json"));
+const site = require(path.join(__dirname, "../site.json"));
 site.generator = "Quest Log " + package.version;
-const src = "./" + config.src;
-const dest = "./" + config.dest;
+const src = path.join(".", config.src);
+const dest = path.join(".", config.dest);
 let data = {};
 
 
@@ -28,10 +30,13 @@ rimraf(path.join(dest, "*"), function() {
 
 function buildBlog() {
   makeDirIfNotExist(path.join(dest, "posts"));
-  copyFolder("css");
-  copyFolder("images");
-  copyFolder("fonts");
-copyFavicons();
+
+  copydir.sync(path.join(src, "css"), path.join(dest, "css"), {});
+
+  copydir.sync(path.join(src, "images"), path.join(dest, "images"), {});
+
+  copydir.sync(path.join(src, "fonts"), path.join(dest, "fonts"), {});
+  copyFavicons();
 
 
   data = addPageData(createData());
@@ -46,23 +51,21 @@ copyFavicons();
   compilePosts(data);
 }
 
-function copyFavicons(){
+function copyFavicons() {
   favicons = ["android-chrome-192x192.png",
-	"android-chrome-512x512.png",
-	"apple-touch-icon.png",
-	"favicon-16x16.png",
-	"favicon-32x32.png",
-	"favicon.ico",
-	"site.webmanifest"];
+    "android-chrome-512x512.png",
+    "apple-touch-icon.png",
+    "favicon-16x16.png",
+    "favicon-32x32.png",
+    "favicon.ico",
+    "site.webmanifest"
+  ];
   favicons.forEach((favicon) => {
     fs.copyFileSync(path.join(src, favicon), path.join(dest, favicon));
   });
 }
 
-function copyFolder(name) {
-  makeDirIfNotExist(path.join(dest, name));
-  copydir.sync(path.join(src, name), path.join(dest, name));
-}
+
 
 function addPageData(data) {
   var newData = data;
@@ -70,8 +73,9 @@ function addPageData(data) {
     if (page.showInNav) {
       var pageName = _.kebabCase(page.name);
       var jsonPath = path.join(src, "pages", pageName + ".json");
+      console.log("jsonPath", jsonPath);
       if (fs.existsSync(jsonPath)) {
-        newData[_.camelCase(page.name)] = require("./" + jsonPath);
+        newData[_.camelCase(page.name)] = fs.readFileSync(jsonPath);
       }
     }
   });
@@ -199,6 +203,7 @@ function returnFlatPostList(tree) {
         var postMarkdownFile = path.join(year, month, post);
         var postMeta = getPostMeta(path.join(src, "posts", postMarkdownFile));
         var blurb = getBlurb(postMeta);
+        console.log("postMeta.date", postMeta.date, moment(postMeta.date).format('h:mm a'));
         flatPostList.push({
           title: postMeta.title,
           dateTime: postMeta.date,

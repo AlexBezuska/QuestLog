@@ -1,33 +1,35 @@
-# <img src="/src/images/logo.png" width="25"> Quest Log  
+# <img src="/src/images/logo.png" width="25"> Quest Log
 
 <img src="/src/images/sample-image.png" width="400">
 
-
-
 Quest Log is a simple NodeJS CLI + Markdown static blog engine that uses standard Jekyll Markdown format, Handlebars for templating, and features convenient command line tools.
+
+Availble on NPM: [Quest Log](https://www.npmjs.com/package/quest-log)
 
 This repo is on:
 [GitLab](https://gitlab.com/AlexBezuska/quest-log) \| [GitHub](https://github.com/AlexBezuska/quest-log)
 
 ## Quick Start Guide
 
-1.  Download [Quest Log zip file](https://github.com/AlexBezuska/quest-log/archive/master.zip) and extract it's contents into a folder
-
-2.  Navigate inside the folder in your terminal and run this command to download Quest Log's dependencies:
-```bash
-npm install
-```
-4.  From here you can generate a post using the `add-post` command:
-    *Note: you can use this command in two ways, but we will start with creating a post with today's date. To create a post for a different day see the [Retro-posting section](#retro-posting)*
+1.  Navigate inside the folder in your terminal and run this command to install the Quest Log npm module:
 
 ```bash
-npm run add-post today "Hello World"
+npm install quest-log
 ```
 
-The structure of the command has 3 parts:  
-The add-post command: `npm run add-post`  
-Telling  Quest Log to use today's date: `today`  
-and finally the title of your new post(in quotes): `"Hello World"`  
+2.  Install Quest Log's folder structure into your project:
+
+```bash
+npx quest-log-install
+```
+
+3.  From here you can generate a post using the `npx quest-log-post` command:
+
+```bash
+npx quest-log-post "Hello World"
+```
+
+where `"Hello World"` is the title of your new post(in quotes).  
 
 Now you you should see the path of your new post's markdown file in your terminal, ex:
 
@@ -43,7 +45,7 @@ New post markdown file created in: ./src/posts/2019/06/2019-06-08-16.33.33-hello
     You do this with
 
     ```bash
-     npm start
+     npx quest-log-build
     ```
 
     The files will magically appear in the `./dest` folder.
@@ -57,14 +59,8 @@ Even though this is a Node project there is a really simple way to serve a stati
 Open a new tab in your terminal and run the command (from inside the `./dest` folder):
 
 ```bash
+cd dest
 python -m SimpleHTTPServer 8000
-```
-
-You can change the port to whatever you like.
-I have also included a npm script command if you are okay with using the default post:
-
-```bash
-npm run serve
 ```
 
 ### Getting your new Quest Log site on the web
@@ -77,7 +73,7 @@ Be sure:
 
 I will provide some tips on doing this in a later patch.
 
-## Changing
+## Changing things and making it your own
 
 Make changes in the `./config.json` file to make your Quest Log site your own.
 
@@ -124,26 +120,12 @@ _Note: One page must have the fileName `index.html`, this is the first page when
 Each page will require a corresponding Handlebars file of the same name in the `./src/pages/` folder. For example:
 if you want a `portfolio.html` page you need to add a `portfolio.hbs` file in `./src/pages/`.
 
-## Retro-posting
-
-If you want to create a new post for a day other than today, you can do that, I won't judge.
-
-```bash
-npm run add-post 2019 06 07 "Hello from the past!"
-```
-
-The structure of the command has 3 parts:  
-The add-post command: `npm run add-post`  
-Telling Quest Log the year, month, and day to use (in this specific order, with spaces): `2019 06 07`  
-and finally the title of your new post(in quotes): `"Hello from the past!"`
-
----
+* * *
 
 ## Known Bugs
 
 (Help appreciated!)
 
--   Needs favicon
 -   Embedded youtube videos don't work
 
 ## Future improvements
@@ -153,3 +135,4 @@ and finally the title of your new post(in quotes): `"Hello from the past!"`
 -   Partial handling
     -   The `insertPartials` function in guestlog.js is a bit of a hack. There is probably a better way to handle partials in handlebars, but this works for now.
 -   Make post pagination top and bottom optional
+-   Add a way to use the `npx quest-log-post` command with a custom date (not today)

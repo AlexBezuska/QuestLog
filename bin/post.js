@@ -1,42 +1,41 @@
+#! /usr/bin/env node
+
 var fs = require("fs");
 var path = require("path");
 var handlebars = require("handlebars");
 var moment = require("moment");
+const _ = require('lodash');
 
 var emptyPost = fs.readFileSync("src/pages/blank-post.hbs", "utf-8");
 var date = new Date();
-var time = moment(date).format('HH.mm.ss');
 
 const args = process.argv.slice(2);
-var postArgs = {};
-if (args[0] == "today") {
-  postArgs.year = moment(date).format("YYYY");
-  postArgs.month = moment(date).format("MM");
-  postArgs.day = moment(date).format("DD");
-  postArgs.title = args[1];
-} else {
-  postArgs.year = args[0];
-  postArgs.month = args[1];
-  postArgs.day = args[2];
-  postArgs.title = args[3];
-}
+let postTitle = args[0];
+
+// if (args[1]) {
+//   postDate = args[1];
+// }
+var postISODate = date.toISOString();
+var postYear = moment(date).format("YYYY");
+var postMonth = moment(date).format("MM");
+var postDay = moment(date).format("DD");
+var postTime = moment(date).format('HH.mm.ss');
+
+
 
 var defaults = {
-  "year": postArgs.year,
-  "month": postArgs.month,
-  "day": postArgs.day,
-  "time": time.replace(/\./g, ':') + "-04:00",
-  "title": postArgs.title || "new post",
+  "date": postISODate,
+  "postDate": postISODate,
+  "title": postTitle || "new post",
   "categories": [],
   "tags": [],
   "content": "post content here"
 }
 
-var yearFolder = `./src/posts/${postArgs.year}/`;
-var monthFolder = `./src/posts/${postArgs.year}/${postArgs.month}/`;
-var titleJoined = defaults.title.replace(/\s+/g, '-').toLowerCase();
-var fileName = `${postArgs.year}-${postArgs.month}-${postArgs.day}-${time}-${titleJoined}.markdown`;
-
+var yearFolder = `./src/posts/${postYear}/`;
+var monthFolder = `./src/posts/${postYear}/${postMonth}/`;
+var titleJoined = _.kebabCase(defaults.title);
+var fileName = `${postYear}-${postMonth}-${postDay}-${postTime}-${titleJoined}.markdown`;
 
 
 var content = renderFromExternalTemplate(emptyPost, defaults);
