@@ -9,9 +9,11 @@ This repo is on:
 
 1.  Download [Quest Log zip file](https://github.com/AlexBezuska/quest-log/archive/master.zip) and extract it's contents into a folder
 
-2.  Navigate inside the folder in your terminal
-
-3.  From here you can generate a post using the `add-post` command:
+2.  Navigate inside the folder in your terminal and run this command to download Quest Log's dependencies:
+```bash
+npm install
+```
+4.  From here you can generate a post using the `add-post` command:
     *Note: you can use this command in two ways, but we will start with creating a post with today's date. To create a post for a different day see the [Retro-posting section](#retro-posting)*
 
 ```bash
@@ -29,7 +31,7 @@ Now you you should see the path of your new post's markdown file in your termina
 New post markdown file created in: ./src/posts/2019/06/2019-06-08-16.33.33-hello-world.markdown
 ```
 
-4.  Now you can open that file in the text editor of your choice and edit the post's content to wahtever you want to post about!  
+5.  Now you can open that file in the text editor of your choice and edit the post's content to wahtever you want to post about!  
     **But before we get posting too much, let's talk about how to view your Quest Log site locally on your computer.**
 
 -   Now that we have a post markdown file created you will need to run Quest Log's build command to generate the static html files you can view in a browser.
