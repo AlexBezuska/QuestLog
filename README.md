@@ -1,4 +1,8 @@
-# Quest Log
+# <img src="/src/images/logo.svg" width="40"> Quest Log  
+
+<img src="/src/images/sample-image.png" width="400">
+
+
 
 Quest Log is a simple NodeJS CLI + Markdown static blog engine that uses standard Jekyll Markdown format, Handlebars for templating, and features convenient command line tools.
 

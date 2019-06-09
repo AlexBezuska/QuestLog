@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.0.2] - 2017-06-20
+## [0.0.3] - 2019-06-09
+### Added
+- add logo
+
+
+## [0.0.2] - 2019-06-09
 ### Added
 - Fix bug with 'npm run serve' command
 - Updated docs
