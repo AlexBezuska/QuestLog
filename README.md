@@ -1,4 +1,4 @@
-# <img src="/src/images/logo.png" width="40"> Quest Log  
+# <img src="/src/images/logo.png" width="25"> Quest Log  
 
 <img src="/src/images/sample-image.png" width="400">
 
