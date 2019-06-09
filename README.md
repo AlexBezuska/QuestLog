@@ -11,25 +11,33 @@ This repo is on:
 
 ## Quick Start Guide
 
-1.  Navigate inside the folder in your terminal and run this command to install the Quest Log npm module:
+-   Create a folder for your blog to live in and navigate inside the folder in your terminal.  
+    Example:
+
+```bash
+mkdir chilaquiles-are-life-blog
+cd chilaquiles-are-life-blog
+```
+
+-   Run this command to install the Quest Log npm module:
 
 ```bash
 npm install quest-log
 ```
 
-2.  Install Quest Log's folder structure into your project:
+-   Install Quest Log's folder structure into your project:
 
 ```bash
 npx quest-log-install
 ```
 
-3.  From here you can generate a post using the `npx quest-log-post` command:
+-   From here you can generate a post using the `npx quest-log-post` command:
 
 ```bash
-npx quest-log-post "Hello World"
+npx quest-log-post "Chilaquiles are a journey for the soul"
 ```
 
-where `"Hello World"` is the title of your new post(in quotes).  
+where everything after `npx quest-log-post` is the title of your new post(in quotes!).  
 
 Now you you should see the path of your new post's markdown file in your terminal, ex:
 
@@ -37,8 +45,8 @@ Now you you should see the path of your new post's markdown file in your termina
 New post markdown file created in: ./src/posts/2019/06/2019-06-08-16.33.33-hello-world.markdown
 ```
 
-5.  Now you can open that file in the text editor of your choice and edit the post's content to wahtever you want to post about!  
-    **But before we get posting too much, let's talk about how to view your Quest Log site locally on your computer.**
+-   Now you can open that file in the text editor of your choice and edit the post's content to wahtever you want to post about!  
+     **But before we get posting too much, let's talk about how to view your Quest Log site locally on your computer.**
 
 -   Now that we have a post markdown file created you will need to run Quest Log's build command to generate the static html files you can view in a browser.
 

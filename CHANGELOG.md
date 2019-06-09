@@ -7,11 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.13] - 2019-06-09
+## [1.0.14] - 2019-06-09
 
 ### Bug Fixes
 
 -   Fix images in readme on NPM
+-   update readme
 
 ## [1.0.12] - 2019-06-09
 

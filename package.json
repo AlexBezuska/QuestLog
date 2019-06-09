@@ -1,6 +1,6 @@
 {
   "name": "quest-log",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "A simple NodeJS CLI + Markdown static blog engine that uses standard Jekyll Markdown format, Handlebars for templating, and features convenient command line tools.",
   "bin": {
     "quest-log-install": "bin/install.js",
