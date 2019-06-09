@@ -42,7 +42,7 @@ where everything after `npx quest-log-post` is the title of your new post(in quo
 Now you you should see the path of your new post's markdown file in your terminal, ex:
 
 ```bash
-New post markdown file created in: ./src/posts/2019/06/2019-06-08-16.33.33-hello-world.markdown
+New post markdown file created in: ./src/posts/2019/06/2019-06-09-16.12.27-chilaquiles-are-a-journey-for-the-soul.markdown
 ```
 
 -   Now you can open that file in the text editor of your choice and edit the post's content to wahtever you want to post about!  
