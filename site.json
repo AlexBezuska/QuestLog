@@ -1,0 +1,17 @@
+{
+  "title": "Quest Log",
+  "subtitle": "NodeJS CLI + Markdown static blog engine",
+  "description": "Quest Log is a NodeJS CLI + Markdown static blog engine that uses standard Jekyll Markdown format, Handlebars for templating, and features convenient command line tools.‬",
+  "google-analytics-id": "UA-XXXXXX-XX",
+  "pages": [{
+      "name": "Blog",
+      "file": "index.html",
+      "showInNav": true
+    },
+    {
+      "name": "Sample Page",
+      "file": "sample-page.html",
+      "showInNav": true
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{{>header}}
+
+<h1>Sample Page</h1>
+<div class="mt-5 mb-5">
+  <h4>JSON data</h4>
+  <p> Quest Log pages can read any data you add to ./site.json, in addition you can add json files with the same names as your pages in ./src/pages, for example this sample-page.hbs has a companion sample-page.json which is accessible by <em>any
+      page</em> via it's name; in this case 'samplePage'. If your page/json file combo have spaces or dashes in them, the name of the data will be in camelCase. For example: <em>stroopwafel.json</em> becomes <em>stroopwafel</em>, and
+    <em>bagel-funtime.json</em> becomes <em>bagelFuntime</em>.
+
+    <h5>Example of content from JSON</h5>
+    <div class="row">
+      <div class="col-sm-6">
+        <p>Code:</p>
+        <xmp>{{#raw}}
+  <p>Characters:</p>
+  <ul>
+    [[#each samplePage.characters]]
+    <li>[[this]]</li>
+    [[/each]]
+  </ul>
+          {{/raw}}</xmp>
+
+      </div>
+      <div class="col-sm-6">
+              <p>Result:</p>
+        <p>Characters:</p>
+        <ul>
+          {{#each samplePage.characters}}
+            <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      </div>
+    </div>
+
+
+</div>
+
+<div class="mt-5 mb-5">
+  <h4>Bootstrap</h4>
+  <p>Quest Log uses Bootstrap, find out all you can do with Bootstrap here: <a href="https://getbootstrap.com/docs/4.3/getting-started/introduction/" target="_blank">https://getbootstrap.com/docs/4.3/getting-started/introduction/</a>
+    <em>If you wish to remove Bootstrap; you can find it in ./src/partials/header.hbs and ./src/partials/footer.hbs</em></p>
+
+  <p>You can also use Handlebars features in pages, each page is fed data from a coorisponding JSON file of the same name (see the 'sample-page.json' file in the same folder as this file)</p>
+</div>
+
+
+<div class="mt-5 mb-5">
+  <h4>Ionicons</h4>
+  <p>Quest Log uses Ionicons, find all the icons you can use here: <a href="https://ionicons.com/" target="_blank">https://ionicons.com/</a>.
+    <em>If you wish to remove Ionicons; you can find it in ./src/partials/header.hbs</em></p>
+  <div class="row">
+    <div class="col-sm-6">
+      <p><i class="ion-md-bookmarks"></i> {{site.title}}</p>
+      <p><i class="ion-md-bonfire"></i> {{site.title}}</p>
+      <p><i class="ion-md-book"></i> {{site.title}}</p>
+      <p><i class="ion-md-flame"></i> {{site.title}}</p>
+      <p><i class="ion-md-journal"></i> {{site.title}}</p>
+      <p><i class="ion-md-moon"></i> {{site.title}}</p>
+    </div>
+    <div class="col-sm-6">
+      <p><i class="ion-ios-bookmarks"></i> {{site.title}}</p>
+      <p><i class="ion-ios-bonfire"></i> {{site.title}}</p>
+      <p><i class="ion-ios-book"></i> {{site.title}}</p>
+      <p><i class="ion-ios-flame"></i> {{site.title}}</p>
+      <p><i class="ion-ios-journal"></i> {{site.title}}</p>
+      <p><i class="ion-ios-moon"></i> {{site.title}}</p>
+    </div>
+  </div>
+
+</div>
+
+
+{{>footer}}

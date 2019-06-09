@@ -1,0 +1,47 @@
+{{>header}}
+
+
+  <div class="row">
+
+    <div class="col-md-12 blog-main">
+      <div class="post-page">
+
+        <nav class="blog-pagination">
+          {{#if post.meta.prev}}
+          <a class="btn hvr-grow" href="{{post.meta.prev.url}}" title="Previous post: {{post.meta.prev.title}}"><i class="ion-md-arrow-round-back"></i></a>
+          {{/if}}
+
+          {{#if post.meta.next}}
+          <a class="btn float-right hvr-grow" href="{{post.meta.next.url}}" title="Next post: {{post.meta.next.title}}"><i class="ion-md-arrow-round-forward"></i></a>
+          {{/if}}
+        </nav>
+
+        <div role="main" class="post">
+          {{#if post.meta.coverPhoto}}
+          <img src="{{post.meta.coverPhoto}}" alt="{{post.meta.coverPhotoAlt}}" title="{{post.meta.coverPhotoAlt}}" class="post-cover-photo">
+          {{/if}}
+          <h2 class="post-title">{{post.meta.title}}</h2>
+          <p class="post-meta small">{{post.meta.date}}  {{post.meta.time}}</p>
+          <div class="post-content">
+          {{{post.content}}}
+        </div>
+        </div>
+
+        <nav class="blog-pagination">
+          {{#if post.meta.prev}}
+          <a class="btn hvr-grow" href="{{post.meta.prev.url}}" title="Previous post: {{post.meta.prev.title}}"><i class="ion-md-arrow-round-back"></i></a>
+          {{/if}}
+
+          {{#if post.meta.next}}
+          <a class="btn float-right hvr-grow" href="{{post.meta.next.url}}" title="Next post: {{post.meta.next.title}}"><i class="ion-md-arrow-round-forward"></i></a>
+          {{/if}}
+        </nav>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+{{>footer}}

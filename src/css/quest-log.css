@@ -1,0 +1,25 @@
+body {
+  font-family: "helvetica Neue", helvetica, lato, verdana, sans-serif;
+  letter-spacing: 1px;
+  font-size: 1.1rem;
+}
+
+main>.container {
+  padding-top: 100px;
+}
+
+img {
+  max-width: 100%;
+}
+
+xmp {
+  border: 1px solid #999;
+  display: block;
+  //padding: 3px 3px 2px;
+  margin: 10px;
+  background-color: #232426;
+  border-radius: 4px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-size: 12px;
+  color: white;
+}

@@ -1,0 +1,18 @@
+{{#if featured}}
+<div class="featured">
+
+  <div class="jumbotron rounded row p-0 xs-colrev">
+  <div class="col-md-6 col-xs-12 featured-pad">
+      <h2><a href="{{featured.[0].url}}">{{featured.[0].title}}</a></h2>
+      <p>{{{featured.[0].blurb}}}</p>
+      <p><a href="{{featured.[0].url}}" class="read-more-link ">Continue reading...</a></p>
+  </div>
+  <div class="col-md-6 col-xs-12 pr-0 featured-image-container pr-0">
+    {{#if featured.[0].coverPhoto}}
+    <a href="{{featured.[0].url}}"><img class="img-fluid br-0-4-4-0" src="{{featured.[0].coverPhoto}}" alt="{{featured.[0].coverPhotoAlt}}"></a>
+    {{/if}}
+  </div>
+</div>
+
+</div>
+{{/if}}
