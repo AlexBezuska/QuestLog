@@ -11,8 +11,8 @@ This repo is on:
 
 2.  Navigate inside the folder in your terminal
 
-3.  From the root folder of your site you can generate a post using the `add-post` command
-    *Note: you can use this command in two ways, but we will start with creating a post with today's date. To create a post for a different day see the Retro-posting section*
+3.  From here you can generate a post using the `add-post` command:
+    *Note: you can use this command in two ways, but we will start with creating a post with today's date. To create a post for a different day see the [Retro-posting section](#retro-posting)*
 
 ```bash
 npm run add-post today "Hello World"
@@ -44,12 +44,11 @@ New post markdown file created in: ./src/posts/2019/06/2019-06-08-16.33.33-hello
 
 ### To preview it
 
-This part depends a bit on how you want to do things, if you already have a way you like to use to serve static html files locall you can do that.
-But you can't just open `./dest/index.html` because there are path issues and your images and other things might wonk out on you.
+This part depends a bit on how you want to do things, if you already have a way you like to use to serve static html files locally you can do that.
+But you can't just open `./dest/index.html` because there wll be path issues and your images and other things might wonk out on you.
 
-Mac and Linux method I recomend:  
 Even though this is a Node project there is a really simple way to serve a static site locally using Python called `SimpleHTTPServer` and it is pre-installed on macOS and Ubuntu.
-the command (from inside the `./dest`folder):
+the command (from inside the `./dest` folder):
 
 ```bash
 python -m SimpleHTTPServer 8000
@@ -69,13 +68,14 @@ Be sure:
 
 -   to include all the files in that folder
 -   the `index.html` file exists and is in the room of the folder you serve  
-    I will provide some tips on doing this in a later patch.
+
+I will provide some tips on doing this in a later patch.
 
 ## Changing
 
 Make changes in the `./config.json` file to make your Quest Log site your own.
 
-`title` and `subtitle` are used in both metadata and shown ont he site itself.
+`title` and `subtitle` are used in both metadata and shown on the site itself.
 `description` is your search engine description, and 'google-analytics-id' is optional
 
 ```json
@@ -87,7 +87,7 @@ Make changes in the `./config.json` file to make your Quest Log site your own.
 
 ## How to add additional pages
 
-Pages example `site.json` has a pages area, you can add addtional pages like this:
+Pages example `site.json` has a pages area, you can add additional pages like this:
 _Note: One page must have the fileName `index.html`, this is the first page when people visit your site._
 
 ```json
@@ -115,10 +115,10 @@ _Note: One page must have the fileName `index.html`, this is the first page when
 ],
 ```
 
-Each page will require a corrisponding Handlebars file of the same name in the `./src/pages/` folder. For example:
+Each page will require a corresponding Handlebars file of the same name in the `./src/pages/` folder. For example:
 if you want a `portfolio.html` page you need to add a `portfolio.hbs` file in `./src/pages/`.
 
-## Retroposting
+## Retro-posting
 
 If you want to create a new post for a day other than today, you can do that, I won't judge.
 
@@ -126,12 +126,12 @@ If you want to create a new post for a day other than today, you can do that, I 
 npm run add-post 2019 06 07 "Hello from the past!"
 ```
 
-The scructure of the command has 3 parts:  
+The structure of the command has 3 parts:  
 The add-post command: `npm run add-post`  
 Telling Quest Log the year, month, and day to use (in this specific order, with spaces): `2019 06 07`  
 and finally the title of your new post(in quotes): `"Hello from the past!"`
 
-* * *
+---
 
 ## Known Bugs
 
