@@ -50,7 +50,7 @@ This part depends a bit on how you want to do things, if you already have a way 
 But you can't just open `./dest/index.html` because there wll be path issues and your images and other things might wonk out on you.
 
 Even though this is a Node project there is a really simple way to serve a static site locally using Python called `SimpleHTTPServer` and it is pre-installed on macOS and Ubuntu.
-the command (from inside the `./dest` folder):
+Open a new tab in your terminal and run the command (from inside the `./dest` folder):
 
 ```bash
 python -m SimpleHTTPServer 8000
