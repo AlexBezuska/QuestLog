@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2019-06-09
+
+### Changes
+
+-   `npx quest-log-install` is now `npx quest-log-init` for clairity
+
 ## [1.0.14] - 2019-06-09
 
 ### Bug Fixes

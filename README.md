@@ -28,7 +28,7 @@ npm install quest-log
 -   Install Quest Log's folder structure into your project:
 
 ```bash
-npx quest-log-install
+npx quest-log-init
 ```
 
 -   From here you can generate a post using the `npx quest-log-post` command:
