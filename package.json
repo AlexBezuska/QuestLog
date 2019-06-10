@@ -5,7 +5,8 @@
   "bin": {
     "quest-log-init": "bin/init.js",
     "quest-log-build": "bin/build.js",
-    "quest-log-post": "bin/post.js"
+    "quest-log-post": "bin/post.js",
+    "quest-log-import-tumblr": "bin/import-tumblr.js"
   },
   "homepage": "https://gitlab.com/AlexBezuska/quest-log",
   "repository": {
@@ -28,6 +29,7 @@
   "dependencies": {
     "copy-dir": "^1.1.0",
     "handlebars": "^4.1.2",
+    "he": "^1.2.0",
     "lodash": "^4.17.11",
     "markdown": "^0.5.0",
     "marked": "^0.6.2",

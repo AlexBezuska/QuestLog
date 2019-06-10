@@ -1,57 +1,26 @@
 #! /usr/bin/env node
 
-var fs = require("fs");
-var path = require("path");
-var handlebars = require("handlebars");
-var moment = require("moment");
-const _ = require('lodash');
+const moment = require("moment");
+const questLogPost = require("../lib/quest-log-post");
 
-var emptyPost = fs.readFileSync("src/pages/blank-post.hbs", "utf-8");
-var date = new Date();
-
+const now = new Date();
 const args = process.argv.slice(2);
 let postTitle = args[0];
 
-// if (args[1]) {
-//   postDate = args[1];
-// }
-var postISODate = date.toISOString();
-var postYear = moment(date).format("YYYY");
-var postMonth = moment(date).format("MM");
-var postDay = moment(date).format("DD");
-var postTime = moment(date).format('HH.mm.ss');
-
-
-
-var defaults = {
-  "date": postISODate,
-  "postDate": postISODate,
+var postContent = {
+  "date": now.toISOString(),
+  "year": moment(now).format("YYYY"),
+  "month": moment(now).format("MM"),
+  "day": moment(now).format("DD"),
+  "time": moment(now).format('HH.mm.ss'),
   "title": postTitle || "new post",
   "categories": [],
   "tags": [],
-  "content": "post content here"
-}
+  "content": `This is a sample post created with Quest Log!
 
-var yearFolder = `./src/posts/${postYear}/`;
-var monthFolder = `./src/posts/${postYear}/${postMonth}/`;
-var titleJoined = _.kebabCase(defaults.title);
-var fileName = `${postYear}-${postMonth}-${postDay}-${postTime}-${titleJoined}.markdown`;
+  ![Sample inline image](/images/sample-image.png)
+  Photo by [Nirzar Pangarkar](https://unsplash.com/@nirzar) on [Unsplash](https://unsplash.com)
+`
+};
 
-
-var content = renderFromExternalTemplate(emptyPost, defaults);
-makeDirIfNotExist(yearFolder);
-makeDirIfNotExist(monthFolder);
-fs.writeFileSync(monthFolder + fileName, content);
-console.log("New post markdown file created in:", monthFolder + fileName);
-
-
-function renderFromExternalTemplate(template, data) {
-  var template = handlebars.compile(template);
-  return template(data);
-}
-
-function makeDirIfNotExist(filePath) {
-  if (!fs.existsSync(filePath)) {
-    fs.mkdirSync(filePath);
-  }
-}
+post.create(postContent);

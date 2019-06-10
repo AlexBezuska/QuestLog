@@ -1,25 +1,42 @@
+#! /usr/bin/env node
+
 const fs = require("fs");
 const path = require("path");
 const request = require('sync-request');
 const parser = require('xml2json');
+const moment = require("moment");
+const he = require("he");
+const _ = require('lodash');
+const questLogPost = require("../lib/quest-log-post");
+
+const now = new Date();
 
 const args = process.argv.slice(2);
 const url = args[0] + "/api/read";
 
 var currentPage = 0;
-var perPage = 50;
-var totalPosts = getTotal();
+const perPage = 50;
+var totalPosts = 0;
 var posts = [];
 
-getAllPosts();
+if (args[0]) {
+  totalPosts = getTotal();
+  getAllPosts();
+} else {
+  console.log("A tumblr blog url is required. ex:\n npx quest-log-import-tumblr https://teriyaki-waffles.tumblr.com")
+}
+
 
 function getAllPosts() {
+
   var timesToRun = Math.ceil(totalPosts / perPage);
   for (var i = 0; i < timesToRun; i++) {
     getSetOfPosts(perPage);
     if (i === timesToRun - 1) {
+
       console.log(`added ${posts.length} to the array!`);
-      fs.writeFileSync("./bin/tumblr-posts.json", JSON.stringify(posts, null, 2));
+      createMarkdownFiles(posts);
+      fs.writeFileSync("./tumblr-posts.json", JSON.stringify(posts, null, 2));
     }
   }
 }
@@ -33,35 +50,100 @@ function getTotal() {
 
 function getSetOfPosts(quantity) {
   var start = currentPage * perPage;
-
   var end = start + perPage;
   var query = `${url}?num=${perPage}&start=${start}`;
   console.log(query);
   console.log(`asking for posts between ${start} and ${end}...`);
   var res = request('GET', query);
   var json = JSON.parse(parser.toJson(res.body), null, 2);
-  parsePosts(json);
+  addPosts(json);
   currentPage++;
 }
 
-function parsePosts(data) {
+function addPosts(data) {
   data.tumblr.posts.post.map(function(post) {
-    posts.push(post);
+    if (!post["reblogged-from-url"]) {
+      posts.push(post);
+    }
+  });
+}
+
+function createMarkdownFiles(posts) {
+  var postsCreated = 0;
+  posts.map(function(post) {
+    var postData = createPostContent(post);
+    questLogPost.create(createPostContent(post));
+    postsCreated++;
+  });
+  console.log(`\nTumblr import complete, created ${postsCreated} new Quest Log posts!`);
+}
+
+function createPostContent(tumblrPost) {
+
+  var postDate = new Date(tumblrPost["unix-timestamp"] * 1000);
+  var postData = {
+    "date": postDate.toISOString(),
+    "year": moment(postDate).format("YYYY"),
+    "month": moment(postDate).format("MM"),
+    "day": moment(postDate).format("DD"),
+    "time": moment(postDate).format('HH.mm.ss'),
+    "title": tumblrPost["regular-title"] || "",
+    "categories": [],
+    "tags": tumblrPost.tag || [],
+    "content": "",
+    "coverPhoto": "",
+    "coverPhotoAlt": "",
+    "imported-from": "Tumblr",
+    "import-date": now.toISOString(),
+    "tumblr-id": tumblrPost.id,
+    "tumblr-url": tumblrPost["url-with-slug"],
+    "tumblr-type": tumblrPost.type
+
+  };
+
+  if (tumblrPost.type === "photo") {
+    postData.content += tumblrPost["photo-caption"] || "";
+    postData.coverPhoto = tumblrPost["photo-url"][0]["$t"] || "";
+    postData.coverPhotoAlt = stripHTML(tumblrPost["photo-caption"]);
+  } else if (tumblrPost.type === "video") {
+    postData.content += tumblrPost["video-player"][0];
+    postData.content += tumblrPost["video-caption"];
+  } else if (tumblrPost.type === "answer") {
+    postData.title = tumblrPost["question"];
+    postData.content += tumblrPost["answer"];
+  }
+  postData.content += tumblrPost["regular-body"] || "";
+  postData.title = improvisePostTitle(postData);
+  return postData;
+}
+
+
+function improvisePostTitle(postData) {
+  var newTitle = postData.title;
+  if (!postData.title) {
+    newTitle = truncateTitle(postData.content, 24);
+  }
+  return stripHTML(newTitle);
+}
+
+function truncateTitle(title, charLength) {
+  return _.truncate(title, {
+    'length': charLength,
+    'separator': ' '
   });
 }
 
 
+function stripHTML(str) {
+  var stripedHtml = str.replace(/<[^>]+>/g, '');
+  var decoded = he.decode(stripedHtml);
+  var sanitzed = decoded.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "");
+  return sanitzed.trim();
+}
 
-var samplePost = {
-  //"id": "184215702871",
-  //"url": "https://twoscoopgames.tumblr.com/post/184215702871",
-  //"url-with-slug": "https://twoscoopgames.tumblr.com/post/184215702871/we-have-gone-a-new-direction",
-  //"type": "regular",
-  //"date-gmt": "2019-04-16 01:33:31 GMT",
-  //"date": "Mon, 15 Apr 2019 21:33:31",
-  "unix-timestamp": "1555378411",
-  "slug": "we-have-gone-a-new-direction",
-  "regular-title": "We have gone a new direction!",
-  "regular-body": "<p>New art style, new gameplay, more variety, and more content. We want to bring you the best Kick Bot possible, that means opening ourselves up to releasing on different platforms.</p><figure class=\"tmblr-full\" data-orig-height=\"179\" data-orig-width=\"320\"><img src=\"https://66.media.tumblr.com/2c69ddaaa104593f45ab37a9037d03fc/tumblr_inline_pq15niETkZ1sh27ku_540.gif\" data-orig-height=\"179\" data-orig-width=\"320\"/></figure><figure class=\"tmblr-full\" data-orig-height=\"179\" data-orig-width=\"320\"><img src=\"https://66.media.tumblr.com/14ddeebf8a3370656969ac7e2e9f8bab/tumblr_inline_pq15n5D1Bq1sh27ku_540.gif\" data-orig-height=\"179\" data-orig-width=\"320\"/></figure><figure class=\"tmblr-full\" data-orig-height=\"179\" data-orig-width=\"320\"><img src=\"https://66.media.tumblr.com/dea172b502dbe152bc87921242f14ac8/tumblr_inline_pq15n402TI1sh27ku_540.gif\" data-orig-height=\"179\" data-orig-width=\"320\"/></figure><p>Sign up for the beta and let us know how you play games! <a href=\"https://t.co/OrSIUo9T21\" title=\"http://bit.ly/kbdxbeta\">http://bit.ly/kbdxbeta </a> <br/></p>",
-  "tag": ["kickbotgame", "indie games", "gamedev", "pixel art"]
-};
+// WIP
+//function getYoutubeTitle(){
+//   https://www.youtube.com/embed/TfG2J3FYyJ0?feature=oembed&amp;enablejsapi=1&amp;origin=https://safe.txmblr.com&amp;wmode=opaque
+//   var title;
+//   return title;
+// }

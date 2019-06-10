@@ -1,20 +1,36 @@
 ---
 date: {{date}}
 title: {{title}}
+{{#if categories}}
 categories:
 {{#each categories}}
   - {{this}}
 {{/each}}
+{{/if}}
+{{#if tags}}
 tags:
 {{#each tags}}
   - {{this}}
 {{/each}}
+{{/if}}
 featured: false
-coverPhoto:
-coverPhotoAlt:
+{{#if coverPhoto}}
+coverPhoto: {{coverPhoto}}
+coverPhotoAlt: {{coverPhotoAlt}}
+{{/if}}
+{{#if imported-from}}
+imported-from: {{imported-from}}
+import-date: {{import-date}}
+{{/if}}
+{{#if tumblr-id}}
+tumblr-id: {{tumblr-id}}
+{{/if}}
+{{#if tumblr-url}}
+tumblr-url: {{tumblr-url}}
+{{/if}}
+{{#if tumblr-type}}
+tumblr-type: {{tumblr-type}}
+{{/if}}
 ---
 
-This is a sample post created with Quest Log!
-
-![Sample inline image](/images/sample-image.png)  
-Photo by [Nirzar Pangarkar](https://unsplash.com/@nirzar?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText) on [Unsplash](https://unsplash.com/search/photos/funky-notebook?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText)
+{{{content}}}
