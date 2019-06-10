@@ -8,10 +8,7 @@ npm-debug.log
 dest/*
 !dest/.gitkeep
 
-
-# remove the lines below to make it your own
-# You will not be able to add new css, pages, posts, images or other content unless you remove the following gitignore rules
-
+bin/tumblr-posts.json
 
 src/posts/*
 !src/posts/.gitkeep
