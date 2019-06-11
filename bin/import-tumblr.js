@@ -7,6 +7,10 @@ const parser = require('xml2json');
 const moment = require("moment");
 const he = require("he");
 const _ = require('lodash');
+const async = require('async');
+const metadata = require('html-metadata');
+const getUrls = require('get-urls');
+
 const questLogPost = require("../lib/quest-log-post");
 
 const now = new Date();
@@ -18,6 +22,7 @@ var currentPage = 0;
 const perPage = 50;
 var totalPosts = 0;
 var posts = [];
+var imageUrls = [];
 
 if (args[0]) {
   totalPosts = getTotal();
@@ -28,18 +33,42 @@ if (args[0]) {
 
 
 function getAllPosts() {
-
   var timesToRun = Math.ceil(totalPosts / perPage);
   for (var i = 0; i < timesToRun; i++) {
     getSetOfPosts(perPage);
     if (i === timesToRun - 1) {
-
       console.log(`added ${posts.length} to the array!`);
-      createMarkdownFiles(posts);
+      //videoPostTitleFix(function() {
+      console.log("write the file JSON!");
       fs.writeFileSync("./tumblr-posts.json", JSON.stringify(posts, null, 2));
+      createMarkdownFiles(posts);
+      //  });
     }
   }
 }
+
+// function getAllVideoPosts(posts) {
+//   return posts.filter(function(post) {
+//     if (!post["regular-title"] && post["video-source"]) {
+//       return true;
+//     }
+//   });
+// }
+//
+// function videoPostTitleFix(callback) {
+//   var videoPosts = getAllVideoPosts(posts);
+//
+//   async.forEach(videoPosts, (post) => {
+//     var url = post["video-source"];
+//     metadata(url, (error, metadata) => {
+//       post["regular-title"] = stripHTML(metadata.general.title);
+//
+//     });
+//   }, function(err) {
+//     callback();
+//   });
+// }
+
 
 function getTotal() {
   var res = request('GET', url);
@@ -76,10 +105,11 @@ function createMarkdownFiles(posts) {
     postsCreated++;
   });
   console.log(`\nTumblr import complete, created ${postsCreated} new Quest Log posts!`);
+  //console.log(imageUrls);
+  fs.writeFileSync("./tumblr-images.json", JSON.stringify(imageUrls, null, 2));
 }
 
 function createPostContent(tumblrPost) {
-
   var postDate = new Date(tumblrPost["unix-timestamp"] * 1000);
   var postData = {
     "date": postDate.toISOString(),
@@ -98,12 +128,14 @@ function createPostContent(tumblrPost) {
     "tumblr-id": tumblrPost.id,
     "tumblr-url": tumblrPost["url-with-slug"],
     "tumblr-type": tumblrPost.type
-
   };
 
   if (tumblrPost.type === "photo") {
     postData.content += tumblrPost["photo-caption"] || "";
     postData.coverPhoto = tumblrPost["photo-url"][0]["$t"] || "";
+
+    imageUrls.push(postData.coverPhoto);
+
     postData.coverPhotoAlt = stripHTML(tumblrPost["photo-caption"]);
   } else if (tumblrPost.type === "video") {
     postData.content += tumblrPost["video-player"][0];
@@ -113,15 +145,21 @@ function createPostContent(tumblrPost) {
     postData.content += tumblrPost["answer"];
   }
   postData.content += tumblrPost["regular-body"] || "";
+  Array.from(getUrls(postData.content)).map((url) => {
+    if (url.includes(".jpg") || url.includes(".png") || url.includes(".gif") || url.includes(".svg")) {
+      imageUrls.push(url);
+    }
+  });
+
+
   postData.title = improvisePostTitle(postData);
   return postData;
 }
 
-
 function improvisePostTitle(postData) {
   var newTitle = postData.title;
   if (!postData.title) {
-    newTitle = truncateTitle(postData.content, 24);
+    newTitle = `Post from ${moment(postData.date).format('MMMM Do, YYYY')}`
   }
   return stripHTML(newTitle);
 }
@@ -133,17 +171,9 @@ function truncateTitle(title, charLength) {
   });
 }
 
-
 function stripHTML(str) {
   var stripedHtml = str.replace(/<[^>]+>/g, '');
   var decoded = he.decode(stripedHtml);
   var sanitzed = decoded.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "");
   return sanitzed.trim();
 }
-
-// WIP
-//function getYoutubeTitle(){
-//   https://www.youtube.com/embed/TfG2J3FYyJ0?feature=oembed&amp;enablejsapi=1&amp;origin=https://safe.txmblr.com&amp;wmode=opaque
-//   var title;
-//   return title;
-// }

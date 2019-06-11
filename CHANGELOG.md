@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 -   split post creation into a library
 -   working tumblr importer!
 -   still need to fix video post titles
--   still need to downlaod tumblr images
+-   still need to download tumblr images
 
 ## [2.0.1] - 2019-06-09
 

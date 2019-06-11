@@ -18,9 +18,9 @@ var postContent = {
   "tags": [],
   "content": `This is a sample post created with Quest Log!
 
-  ![Sample inline image](/images/sample-image.png)
+  ![Sample inline image](/images/sample-image.png)  
   Photo by [Nirzar Pangarkar](https://unsplash.com/@nirzar) on [Unsplash](https://unsplash.com)
 `
 };
 
-post.create(postContent);
+questLogPost.create(postContent);
