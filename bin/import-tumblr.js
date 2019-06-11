@@ -11,6 +11,9 @@ const async = require('async');
 const metadata = require('html-metadata');
 const getUrls = require('get-urls');
 
+const config = require(path.join(__dirname, "../config.json"));
+const src = path.join(".", config.src);
+
 const questLogPost = require("../lib/quest-log-post");
 
 const now = new Date();
@@ -22,6 +25,7 @@ var currentPage = 0;
 const perPage = 50;
 var totalPosts = 0;
 var posts = [];
+var postsConverted = [];
 var imageUrls = [];
 
 if (args[0]) {
@@ -37,11 +41,17 @@ function getAllPosts() {
   for (var i = 0; i < timesToRun; i++) {
     getSetOfPosts(perPage);
     if (i === timesToRun - 1) {
-      console.log(`added ${posts.length} to the array!`);
-      //videoPostTitleFix(function() {
+      console.log(`Found ${posts.length} posts total (excuding reblogged posts from other authors).`);
       console.log("write the file JSON!");
       fs.writeFileSync("./tumblr-posts.json", JSON.stringify(posts, null, 2));
-      createMarkdownFiles(posts);
+      postsConverted = convertPosts(posts);
+      console.log("write the file JSON!");
+      fs.writeFileSync("./converted-tumblr-posts.json", JSON.stringify(postsConverted, null, 2));
+      downloadImages(imageUrls);
+      //videoPostTitleFix(function() {
+
+      createMarkdownFiles(postsConverted);
+
       //  });
     }
   }
@@ -58,14 +68,15 @@ function getAllPosts() {
 // function videoPostTitleFix(callback) {
 //   var videoPosts = getAllVideoPosts(posts);
 //
-//   async.forEach(videoPosts, (post) => {
+//   async.forEach(videoPosts, (post, callback) => {
 //     var url = post["video-source"];
 //     metadata(url, (error, metadata) => {
 //       post["regular-title"] = stripHTML(metadata.general.title);
-//
+//       console.log(`post["regular-title"]`, post["regular-title"]);
+//       callback();
 //     });
 //   }, function(err) {
-//     callback();
+//     console.log('iterating done');
 //   });
 // }
 
@@ -97,19 +108,25 @@ function addPosts(data) {
   });
 }
 
-function createMarkdownFiles(posts) {
+
+function createMarkdownFiles(postsConverted) {
   var postsCreated = 0;
-  posts.map(function(post) {
-    var postData = createPostContent(post);
-    questLogPost.create(createPostContent(post));
+  postsConverted.map(function(post) {
+    questLogPost.create(post);
     postsCreated++;
   });
   console.log(`\nTumblr import complete, created ${postsCreated} new Quest Log posts!`);
-  //console.log(imageUrls);
+
   fs.writeFileSync("./tumblr-images.json", JSON.stringify(imageUrls, null, 2));
 }
 
-function createPostContent(tumblrPost) {
+function convertPosts(posts) {
+  return posts.map((post) => {
+    return convertPost(post);
+  });
+}
+
+function convertPost(tumblrPost) {
   var postDate = new Date(tumblrPost["unix-timestamp"] * 1000);
   var postData = {
     "date": postDate.toISOString(),
@@ -132,9 +149,10 @@ function createPostContent(tumblrPost) {
 
   if (tumblrPost.type === "photo") {
     postData.content += tumblrPost["photo-caption"] || "";
-    postData.coverPhoto = tumblrPost["photo-url"][0]["$t"] || "";
-
-    imageUrls.push(postData.coverPhoto);
+    var coverPhoto = tumblrPost["photo-url"][0]["$t"];
+    console.log("===================================================\n", coverPhoto);
+    postData.coverPhoto = localizeImageUrl(coverPhoto, postData) || "";
+    addImageUrl(coverPhoto, postData);
 
     postData.coverPhotoAlt = stripHTML(tumblrPost["photo-caption"]);
   } else if (tumblrPost.type === "video") {
@@ -143,17 +161,38 @@ function createPostContent(tumblrPost) {
   } else if (tumblrPost.type === "answer") {
     postData.title = tumblrPost["question"];
     postData.content += tumblrPost["answer"];
+  } else if (tumblrPost.type === "link") {
+    postData.title = tumblrPost["link-text"];
+    postData.content += `<a href="${tumblrPost["link-url"]}">${tumblrPost["link-text"]}</a>`;
+    postData.content += tumblrPost["link-description"];
   }
   postData.content += tumblrPost["regular-body"] || "";
   Array.from(getUrls(postData.content)).map((url) => {
     if (url.includes(".jpg") || url.includes(".png") || url.includes(".gif") || url.includes(".svg")) {
-      imageUrls.push(url);
+      addImageUrl(url, postData);
+      postData.content = replaceAll(postData.content, url, localizeImageUrl(url, postData));
     }
   });
 
-
   postData.title = improvisePostTitle(postData);
   return postData;
+}
+
+
+function replaceAll(target, search, replacement) {
+  return target.split(search).join(replacement);
+}
+
+function addImageUrl(url, postData) {
+  imageUrls.push({
+    "remote": url,
+    "local": localizeImageUrl(url, postData)
+  });
+}
+
+function localizeImageUrl(url, postData) {
+  var filename = url.substring(url.lastIndexOf('/') + 1);
+  return path.join("/images", postData.year, postData.month, filename);
 }
 
 function improvisePostTitle(postData) {
@@ -176,4 +215,29 @@ function stripHTML(str) {
   var decoded = he.decode(stripedHtml);
   var sanitzed = decoded.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "");
   return sanitzed.trim();
+}
+
+function downloadImages(imageUrls) {
+  imageUrls.map((image) => {
+    downloadImage(image.remote, image.local);
+  })
+}
+
+function downloadImage(url, destination) {
+  var fullpath = path.join(src, destination);
+  if (fs.existsSync(fullpath)) {
+    console.log(`The image ${fullpath} has already been downloaded, skipping.`);
+    return;
+  }
+  var folder = fullpath.substring(0, fullpath.lastIndexOf('/'));
+  var image = request('GET', url);
+  fs.mkdirSync(folder, {
+    recursive: true
+  });
+  if (image) {
+    fs.writeFileSync(fullpath, image.getBody());
+    console.log(`Image saved to ${fullpath}`);
+  } else {
+    console.log(`Error with ${url} please check the url.`);
+  }
 }
