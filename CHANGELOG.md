@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
--   split post creation into a library
--   working tumblr importer!
--   still need to fix video post titles
--   still need to download tumblr images
+
+## [3.0.0] - 2019-06-30
+
+### Changes
+- split post creation into a library
+- working tumblr importer!
+- still need to fix video post titles
+- download tumblr images
+- merge config.json and site.json into quest-log-config.json
 
 ## [2.0.1] - 2019-06-09
 

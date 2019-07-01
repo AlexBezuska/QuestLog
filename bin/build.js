@@ -15,9 +15,9 @@ handlebars.registerHelper("raw", function(options) {
 });
 
 const package = require(path.join(__dirname, "../package.json"));
-const config = require(path.join(__dirname, "../config.json"));
-const site = require(path.join(__dirname, "../site.json"));
-site.generator = "Quest Log " + package.version;
+let configFile = fs.readFileSync(path.join(".","quest-log-config.json"));
+let config = JSON.parse(configFile);
+config.generator = "Quest Log " + package.version;
 const src = path.join(".", config.src);
 const dest = path.join(".", config.dest);
 let data = {};
@@ -42,7 +42,7 @@ function buildBlog() {
   data = addPageData(createData());
 
 
-  data.site.pages.forEach((page) => {
+  data.config.pages.forEach((page) => {
     var pageName = _.kebabCase(page.name);
     var fileName = page.file;
     createPage(pageName, data, path.join(dest, fileName));
@@ -69,7 +69,7 @@ function copyFavicons() {
 
 function addPageData(data) {
   var newData = data;
-  newData.site.pages.forEach((page) => {
+  newData.config.pages.forEach((page) => {
     if (page.showInNav) {
       var pageName = _.kebabCase(page.name);
       var jsonPath = path.join(src, "pages", pageName + ".json");
@@ -95,7 +95,7 @@ function compilePost(postObject) {
   post.next = postObject.next;
 
   var data = {
-    site: site,
+    config: config,
     post: {
       meta: post,
       content: marked(post.__content).replace("<!--more-->", "")
@@ -135,7 +135,7 @@ function createData() {
   var posts = addNextPrevToFlatPostList(sortPosts(returnFlatPostList(createPostTree()))).reverse();
   console.log(posts.length, "Posts");
   var data = {};
-  data.site = site;
+  data.config = config;
   data.featured = onlyFeatured(posts);
   console.log(data.featured.length, " Featured Posts");
 

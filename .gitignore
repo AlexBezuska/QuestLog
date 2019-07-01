@@ -8,7 +8,7 @@ npm-debug.log
 dest/*
 !dest/.gitkeep
 
-bin/tumblr-posts.json
+tumblr-import/*
 
 src/posts/*
 !src/posts/.gitkeep

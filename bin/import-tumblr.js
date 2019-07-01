@@ -2,7 +2,8 @@
 
 const fs = require("fs");
 const path = require("path");
-const request = require('sync-request');
+const request = require('sync-curl');
+const syncRequest = require('sync-request')
 const parser = require('xml2json');
 const moment = require("moment");
 const he = require("he");
@@ -11,7 +12,8 @@ const async = require('async');
 const metadata = require('html-metadata');
 const getUrls = require('get-urls');
 
-const config = require(path.join(__dirname, "../config.json"));
+let configFile = fs.readFileSync(path.join(".","quest-log-config.json"));
+let config = JSON.parse(configFile);
 const src = path.join(".", config.src);
 
 const questLogPost = require("../lib/quest-log-post");
@@ -29,6 +31,9 @@ var postsConverted = [];
 var imageUrls = [];
 
 if (args[0]) {
+  var tumblrImportFolder = path.join(".", "tumblr-import");
+  makeDirIfNotExist(tumblrImportFolder);
+
   totalPosts = getTotal();
   getAllPosts();
 } else {
@@ -43,10 +48,10 @@ function getAllPosts() {
     if (i === timesToRun - 1) {
       console.log(`Found ${posts.length} posts total (excuding reblogged posts from other authors).`);
       console.log("write the file JSON!");
-      fs.writeFileSync("./tumblr-posts.json", JSON.stringify(posts, null, 2));
+      fs.writeFileSync(path.join(tumblrImportFolder, "tumblr-posts-in-tumblr-format.json"), JSON.stringify(posts, null, 2));
       postsConverted = convertPosts(posts);
       console.log("write the file JSON!");
-      fs.writeFileSync("./converted-tumblr-posts.json", JSON.stringify(postsConverted, null, 2));
+      fs.writeFileSync(path.join(tumblrImportFolder, "tumblr-posts-in-quest-log-format.json"), JSON.stringify(postsConverted, null, 2));
       downloadImages(imageUrls);
       //videoPostTitleFix(function() {
 
@@ -82,8 +87,10 @@ function getAllPosts() {
 
 
 function getTotal() {
-  var res = request('GET', url);
-  var json = JSON.parse(parser.toJson(res.body));
+  console.log("looking at url", url);
+  var res = request('GET', url, {encode:'utf8'});
+  var body = res.body.toString();
+  var json = JSON.parse(parser.toJson(body));
   console.log("totalPosts", json.tumblr.posts.total);
   return json.tumblr.posts.total;
 }
@@ -94,8 +101,9 @@ function getSetOfPosts(quantity) {
   var query = `${url}?num=${perPage}&start=${start}`;
   console.log(query);
   console.log(`asking for posts between ${start} and ${end}...`);
-  var res = request('GET', query);
-  var json = JSON.parse(parser.toJson(res.body), null, 2);
+  var res = request('GET', query, {encode:'utf8'});
+  var body = res.body.toString();
+  var json = JSON.parse(parser.toJson(body), null, 2);
   addPosts(json);
   currentPage++;
 }
@@ -117,7 +125,7 @@ function createMarkdownFiles(postsConverted) {
   });
   console.log(`\nTumblr import complete, created ${postsCreated} new Quest Log posts!`);
 
-  fs.writeFileSync("./tumblr-images.json", JSON.stringify(imageUrls, null, 2));
+  fs.writeFileSync(path.join(tumblrImportFolder,"./tumblr-images.json"), JSON.stringify(imageUrls, null, 2));
 }
 
 function convertPosts(posts) {
@@ -211,6 +219,10 @@ function truncateTitle(title, charLength) {
 }
 
 function stripHTML(str) {
+  if (!str){
+    return;
+  }
+  console.log("STRING", str);
   var stripedHtml = str.replace(/<[^>]+>/g, '');
   var decoded = he.decode(stripedHtml);
   var sanitzed = decoded.replace(/[^a-z0-9áéíóúñü \.,_-]/gim, "");
@@ -229,15 +241,24 @@ function downloadImage(url, destination) {
     console.log(`The image ${fullpath} has already been downloaded, skipping.`);
     return;
   }
-  var folder = fullpath.substring(0, fullpath.lastIndexOf('/'));
-  var image = request('GET', url);
-  fs.mkdirSync(folder, {
-    recursive: true
-  });
-  if (image) {
+  var image = syncRequest('GET', url);
+  if (image && image.statusCode < 300) {
+    var folder = fullpath.substring(0, fullpath.lastIndexOf('/'));
+    fs.mkdirSync(folder, {
+      recursive: true
+    });
     fs.writeFileSync(fullpath, image.getBody());
     console.log(`Image saved to ${fullpath}`);
   } else {
     console.log(`Error with ${url} please check the url.`);
+  }
+}
+
+
+
+function makeDirIfNotExist(filePath) {
+  if (!fs.existsSync(filePath)) {
+    fs.mkdirSync(filePath);
+    console.log(`Created new folder ${filePath}`);
   }
 }

@@ -83,7 +83,7 @@ I will provide some tips on doing this in a later patch.
 
 ## Changing things and making it your own
 
-Make changes in the `./config.json` file to make your Quest Log site your own.
+Make changes in the `./quest-log-config.json` file to make your Quest Log site your own.
 
 `title` and `subtitle` are used in both metadata and shown on the site itself.
 `description` is your search engine description, and 'google-analytics-id' is optional
@@ -97,7 +97,7 @@ Make changes in the `./config.json` file to make your Quest Log site your own.
 
 ## How to add additional pages
 
-Pages example `site.json` has a pages area, you can add additional pages like this:
+Pages example `./quest-log-config.` has a pages area, you can add additional pages like this:
 _Note: One page must have the fileName `index.html`, this is the first page when people visit your site._
 
 ```json
@@ -130,17 +130,28 @@ if you want a `portfolio.html` page you need to add a `portfolio.hbs` file in `.
 
 * * *
 
+## Import from other blog platforms
+
+Current working importers:
+
+- Tumblr
+
+In the works:
+
+- Wordpress
+
+
+### TUmblr importer
+
+To import all posts and images from your existing Tumblr blog, navigate to the root of your blog in the terminal and use the command: ``` npx quest-log-import-tumblr https://yourblogname.tumblr.com``` (be sure to use the full url inclusing 'https://' and be sure not to have a '/' at the end of the url)
+
+
 ## Known Bugs
 
-(Help appreciated!)
-
--   Embedded youtube videos don't work
+(Help appreciated!)  
+Check out the 'Bugs' column on the [Quest Log Trello Board](https://trello.com/b/f71FOH4H/quest-log)
 
 ## Future improvements
 
-(Help appreciated!)
-
--   Partial handling
-    -   The `insertPartials` function in guestlog.js is a bit of a hack. There is probably a better way to handle partials in handlebars, but this works for now.
--   Make post pagination top and bottom optional
--   Add a way to use the `npx quest-log-post` command with a custom date (not today)
+(Help appreciated!)  
+Check out the [Quest Log Trello Board](https://trello.com/b/f71FOH4H/quest-log)

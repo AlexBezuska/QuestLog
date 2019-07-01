@@ -4,10 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="{{site.description}}">
-  <meta name="author" content="{{site.author}}">
-  <meta name="generator" content="{{site.generator}}">
-  <title>{{site.title}}</title>
+  <meta name="description" content="{{config.description}}">
+  <meta name="author" content="{{config.author}}">
+  <meta name="generator" content="{{config.generator}}">
+  <title>{{config.title}}</title>
 
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -24,15 +24,15 @@
     <nav class="navbar navbar-expand-md navbar-light fixed-top  bg-light">
       <div class="container">
         <a class="navbar-brand" href="#">
-          <strong class="font-weight-bold"><i class="ion-md-bonfire"></i> {{site.title}}</strong>
-          <p class="small">{{site.subtitle}}</p>
+          <strong class="font-weight-bold"><i class="ion-md-bonfire"></i> {{config.title}}</strong>
+          <p class="small">{{config.subtitle}}</p>
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            {{#each site.pages}}
+            {{#each config.pages}}
               {{#if showInNav}}
                 <li class="nav-item">
                   <a class="nav-link" href="/{{file}}">{{name}}</a>

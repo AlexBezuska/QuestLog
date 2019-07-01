@@ -9,7 +9,7 @@
 
 <div class="mt-5 mb-5">
   <h4>JSON data</h4>
-  <p> Quest Log pages can read any data you add to ./site.json, in addition you can add json files with the same names as your pages in ./src/pages, for example this sample-page.hbs has a companion sample-page.json which is accessible by <em>any
+  <p> Quest Log pages can read any data you add to ./src/config.json, in addition you can add json files with the same names as your pages in ./src/pages, for example this sample-page.hbs has a companion sample-page.json which is accessible by <em>any
       page</em> via it's name; in this case 'samplePage'. If your page/json file combo have spaces or dashes in them, the name of the data will be in camelCase. For example: <em>stroopwafel.json</em> becomes <em>stroopwafel</em>, and
     <em>bagel-funtime.json</em> becomes <em>bagelFuntime</em>.
 
@@ -56,20 +56,20 @@
     <em>If you wish to remove Ionicons; you can find it in ./src/partials/header.hbs</em></p>
   <div class="row">
     <div class="col-sm-6">
-      <p><i class="ion-md-bookmarks"></i> {{site.title}}</p>
-      <p><i class="ion-md-bonfire"></i> {{site.title}}</p>
-      <p><i class="ion-md-book"></i> {{site.title}}</p>
-      <p><i class="ion-md-flame"></i> {{site.title}}</p>
-      <p><i class="ion-md-journal"></i> {{site.title}}</p>
-      <p><i class="ion-md-moon"></i> {{site.title}}</p>
+      <p><i class="ion-md-bookmarks"></i> {{config.title}}</p>
+      <p><i class="ion-md-bonfire"></i> {{config.title}}</p>
+      <p><i class="ion-md-book"></i> {{config.title}}</p>
+      <p><i class="ion-md-flame"></i> {{config.title}}</p>
+      <p><i class="ion-md-journal"></i> {{config.title}}</p>
+      <p><i class="ion-md-moon"></i> {{config.title}}</p>
     </div>
     <div class="col-sm-6">
-      <p><i class="ion-ios-bookmarks"></i> {{site.title}}</p>
-      <p><i class="ion-ios-bonfire"></i> {{site.title}}</p>
-      <p><i class="ion-ios-book"></i> {{site.title}}</p>
-      <p><i class="ion-ios-flame"></i> {{site.title}}</p>
-      <p><i class="ion-ios-journal"></i> {{site.title}}</p>
-      <p><i class="ion-ios-moon"></i> {{site.title}}</p>
+      <p><i class="ion-ios-bookmarks"></i> {{config.title}}</p>
+      <p><i class="ion-ios-bonfire"></i> {{config.title}}</p>
+      <p><i class="ion-ios-book"></i> {{config.title}}</p>
+      <p><i class="ion-ios-flame"></i> {{config.title}}</p>
+      <p><i class="ion-ios-journal"></i> {{config.title}}</p>
+      <p><i class="ion-ios-moon"></i> {{config.title}}</p>
     </div>
   </div>
 
