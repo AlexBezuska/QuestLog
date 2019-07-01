@@ -43,6 +43,7 @@ function buildBlog() {
 
 
   data.config.pages.forEach((page) => {
+    if (page.linkOnly){ return; }
     var pageName = _.kebabCase(page.name);
     var fileName = page.file;
     createPage(pageName, data, path.join(dest, fileName));
@@ -70,13 +71,12 @@ function copyFavicons() {
 function addPageData(data) {
   var newData = data;
   newData.config.pages.forEach((page) => {
-    if (page.showInNav) {
-      var pageName = _.kebabCase(page.name);
-      var jsonPath = path.join(src, "pages", pageName + ".json");
-      console.log("jsonPath", jsonPath);
-      if (fs.existsSync(jsonPath)) {
-        newData[_.camelCase(page.name)] = fs.readFileSync(jsonPath);
-      }
+    if (page.linkOnly){ return; }
+    var pageName = _.kebabCase(page.name);
+    var jsonPath = path.join(src, "pages", pageName + ".json");
+    console.log("jsonPath", jsonPath);
+    if (fs.existsSync(jsonPath)) {
+      newData[_.camelCase(page.name)] = fs.readFileSync(jsonPath);
     }
   });
   return newData;

@@ -95,7 +95,7 @@ Make changes in the `./quest-log-config.json` file to make your Quest Log site y
 "google-analytics-id": "UA-XXXXXX-XX",
 ```
 
-## How to add additional pages
+## How to add additional pages / links to the nav
 
 Pages example `./quest-log-config.json` has a pages area, you can add additional pages like this:
 _Note: One page must have the fileName `index.html`, this is the first page when people visit your site._
@@ -104,29 +104,43 @@ _Note: One page must have the fileName `index.html`, this is the first page when
 "pages":[
   {
     "name": "Home",
-    "file": "index.html",
-    "showInNav": true
+    "file": "index.html"
   },
   {
     "name": "Portfolio",
-    "file": "portfolio.html",
-    "showInNav": true
+    "file": "portfolio.html"
   },
   {
     "name": "Blog",
-    "file": "blog.html",
-    "showInNav": true
+    "file": "blog.html"
   },
   {
     "name": "Contact",
-    "file": "contact.html",
-    "showInNav": true
+    "file": "contact.html"
   }
 ],
 ```
 
 Each page will require a corresponding Handlebars file of the same name in the `./src/pages/` folder. For example:
 if you want a `portfolio.html` page you need to add a `portfolio.hbs` file in `./src/pages/`.
+
+Links can be added using the same method shown above, but you will need to add the `"linkOnly": true` property.
+example:
+```json
+"pages":[
+  {
+    "name": "Blog",
+    "file": "index.html"
+  },
+  {
+    "name": "Games",
+    "file": "http://twoscoopgames.com/",
+    "linkOnly": true
+  },
+],
+```
+In the example above, "Blog" will be the homepage of the QAuest Log site, and "Games" will link directly to the website specified.
+
 
 * * *
 

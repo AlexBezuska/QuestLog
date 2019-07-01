@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 - fix typo in readme
+- add support for raw links in header nav
 
 ## [3.0.0] - 2019-06-30
 
