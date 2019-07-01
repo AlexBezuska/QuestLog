@@ -97,7 +97,7 @@ Make changes in the `./quest-log-config.json` file to make your Quest Log site y
 
 ## How to add additional pages
 
-Pages example `./quest-log-config.` has a pages area, you can add additional pages like this:
+Pages example `./quest-log-config.json` has a pages area, you can add additional pages like this:
 _Note: One page must have the fileName `index.html`, this is the first page when people visit your site._
 
 ```json
