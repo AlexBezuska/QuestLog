@@ -137,7 +137,7 @@ function convertPosts(posts) {
 function convertPost(tumblrPost) {
   var postDate = new Date(tumblrPost["unix-timestamp"] * 1000);
   var postData = {
-    "date": postDate.toISOString(),
+    "dateTime": postDate.toISOString(),
     "year": moment(postDate).format("YYYY"),
     "month": moment(postDate).format("MM"),
     "day": moment(postDate).format("DD"),
@@ -206,7 +206,7 @@ function localizeImageUrl(url, postData) {
 function improvisePostTitle(postData) {
   var newTitle = postData.title;
   if (!postData.title) {
-    newTitle = `Post from ${moment(postData.date).format('MMMM Do, YYYY')}`
+    newTitle = `Post from ${moment(postData.dateTime).format('MMMM Do, YYYY')}`
   }
   return stripHTML(newTitle);
 }

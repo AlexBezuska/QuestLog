@@ -1,0 +1,47 @@
+{{>header}}
+
+
+  <div class="row">
+
+    <div class="col-md-12 blog-main">
+      <div class="post-page">
+
+        <nav class="blog-pagination">
+          {{#if post.prev}}
+          <a class="btn hvr-grow" href="{{post.prev.url}}" title="Previous post: {{post.prev.title}}"><i class="ion-md-arrow-round-back"></i></a>
+          {{/if}}
+
+          {{#if post.next}}
+          <a class="btn float-right hvr-grow" href="{{post.next.url}}" title="Next post: {{post.next.title}}"><i class="ion-md-arrow-round-forward"></i></a>
+          {{/if}}
+        </nav>
+
+        <div role="main" class="post">
+          {{#if post.coverPhoto}}
+          <img src="{{post.coverPhoto}}" alt="{{post.coverPhotoAlt}}" title="{{post.coverPhotoAlt}}" class="post-cover-photo">
+          {{/if}}
+          <h2 class="post-title">{{post.title}}</h2>
+          <p class="post-meta small">{{post.date}}  {{post.time}}</p>
+          <div class="post-content">
+          {{{post.__content}}}
+        </div>
+        </div>
+
+        <nav class="blog-pagination">
+          {{#if post.prev}}
+          <a class="btn hvr-grow" href="{{post.prev.url}}" title="Previous post: {{post.prev.title}}"><i class="ion-md-arrow-round-back"></i></a>
+          {{/if}}
+
+          {{#if post.next}}
+          <a class="btn float-right hvr-grow" href="{{post.next.url}}" title="Next post: {{post.next.title}}"><i class="ion-md-arrow-round-forward"></i></a>
+          {{/if}}
+        </nav>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+{{>footer}}

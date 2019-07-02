@@ -36,11 +36,13 @@ function buildBlog() {
   copydir.sync(path.join(src, "images"), path.join(dest, "images"), {});
 
   copydir.sync(path.join(src, "fonts"), path.join(dest, "fonts"), {});
+  copydir.sync(path.join(src, "api"), path.join(dest, "api"), {});
   copyFavicons();
 
 
   data = addPageData(createData());
 
+  fs.writeFileSync(path.join(src, "api/blog.json"), JSON.stringify(data, null, 2));
 
   data.config.pages.forEach((page) => {
     if (page.linkOnly){ return; }
@@ -74,9 +76,8 @@ function addPageData(data) {
     if (page.linkOnly){ return; }
     var pageName = _.kebabCase(page.name);
     var jsonPath = path.join(src, "pages", pageName + ".json");
-    console.log("jsonPath", jsonPath);
     if (fs.existsSync(jsonPath)) {
-      newData[_.camelCase(page.name)] = fs.readFileSync(jsonPath);
+      newData[_.camelCase(page.name)] = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
     }
   });
   return newData;
@@ -89,39 +90,31 @@ function compilePosts(data) {
   console.log("- All done -");
 }
 
-function compilePost(postObject) {
-  var post = getPostMeta(postObject.src);
-  post.prev = postObject.prev;
-  post.next = postObject.next;
-
+function compilePost(post) {
   var data = {
     config: config,
-    post: {
-      meta: post,
-      content: marked(post.__content).replace("<!--more-->", "")
-    }
+    post: post
   };
-
-  data.post.meta.dateTime = data.post.meta.date;
-  data.post.meta.time = moment(data.post.meta.date).format('hh:mm a');
-  data.post.meta.date = moment(data.post.meta.date).format('MMMM Do, YYYY');
-
-  createPage(config.postTemplate, data, dest + postObject.url)
+  createPage(config.postTemplate, data, dest + data.post.url, "post");
 }
 
 function insertPartials(templateName) {
-  var completeTemplate = fs.readFileSync(path.join(src, config.templatesDirectory, templateName + ".hbs"), "utf8");
+  var completeTemplate;
+  if (templateName === "post"){
+    completeTemplate = fs.readFileSync(path.join(config.partialsDirectory, templateName + ".hbs"), "utf8");
+  } else {
+    var completeTemplate = fs.readFileSync(path.join(src, config.templatesDirectory, templateName + ".hbs"), "utf8");
+  }
 
   config.partials.forEach((partial) => {
-    var partialTemplate = fs.readFileSync(path.join(src, config.partialsDirectory, partial + ".hbs"), "utf8");
+    var partialTemplate = fs.readFileSync(path.join(config.partialsDirectory, partial + ".hbs"), "utf8");
     var partialTag = "{{>tag}}".replace("tag", partial);
     completeTemplate = completeTemplate.replace(partialTag, partialTemplate);
   });
   return completeTemplate;
 }
 
-function createPage(templateName, data, outputFileName) {
-
+function createPage(templateName, data, outputFileName, type) {
   var html = renderFromExternalTemplate(insertPartials(templateName), data);
   fs.writeFileSync(outputFileName, html);
 }
@@ -132,13 +125,21 @@ function renderFromExternalTemplate(template, data) {
 }
 
 function createData() {
-  var posts = addNextPrevToFlatPostList(sortPosts(returnFlatPostList(createPostTree()))).reverse();
+  var posts = addNextPrevToFlatPostList(
+    sortPosts(
+      returnFlatPostList(
+        createPostTree()
+      )
+    )
+  );
+  if (config.featureMostRecentPost){
+    posts[posts.length - 1].featured = true;
+  }
   console.log(posts.length, "Posts");
   var data = {};
   data.config = config;
   data.featured = onlyFeatured(posts);
   console.log(data.featured.length, " Featured Posts");
-
   data.posts = posts;
   return data;
 }
@@ -158,30 +159,27 @@ function onlyFeatured(posts) {
 function addNextPrevToFlatPostList(posts) {
   var list = [];
   for (var i = 0; i < posts.length; i++) {
-    var postInfo = {};
-    postInfo["title"] = posts[i].title;
-    postInfo["featured"] = posts[i].featured;
-    postInfo["date"] = posts[i].date;
-    postInfo["src"] = posts[i].src;
-    postInfo["url"] = posts[i].url;
-    postInfo["category"] = posts[i].category;
-    postInfo["blurb"] = posts[i].blurb;
-    postInfo["coverPhoto"] = posts[i].coverPhoto;
-    postInfo["coverPhotoAlt"] = posts[i].coverPhotAlt;
+    var postInfo = posts[i];
     if (i > 0) {
-      var prev = posts[i - 1];
-      postInfo["prev"] = {
-        title: prev.title,
-        date: prev.date,
-        url: prev.url,
-      };
-    }
-    if (i < posts.length - 1) {
-      var next = posts[i + 1];
+      var next = posts[i - 1];
       postInfo["next"] = {
         title: next.title,
         date: next.date,
         url: next.url,
+        coverPhoto: next.coverPhoto,
+        coverPhotAlt: next.coverPhotAlt,
+        blurb: next.blurb
+      };
+    }
+    if (i < posts.length - 1) {
+      var prev = posts[i + 1];
+      postInfo["prev"] = {
+        title: prev.title,
+        date: prev.date,
+        url: prev.url,
+        coverPhoto: prev.coverPhoto,
+        coverPhotAlt: prev.coverPhotAlt,
+        blurb: prev.blurb
       };
     }
     list.push(postInfo);
@@ -191,7 +189,7 @@ function addNextPrevToFlatPostList(posts) {
 
 function sortPosts(posts) {
   return posts.sort(function(a, b) {
-    return a.dateTime - b.dateTime;
+    return b.dateTime - a.dateTime;
   });
 }
 
@@ -201,32 +199,16 @@ function returnFlatPostList(tree) {
     Object.keys(tree[year]).map((month) => {
       tree[year][month].map((post) => {
         var postMarkdownFile = path.join(year, month, post);
-        var postMeta = getPostMeta(path.join(src, "posts", postMarkdownFile));
-        var blurb = getBlurb(postMeta);
-        console.log("postMeta.date", postMeta.date, moment(postMeta.date).format('h:mm a'));
-        flatPostList.push({
-          title: postMeta.title,
-          dateTime: postMeta.date,
-          date: moment(postMeta.date).format('MMMM Do, YYYY'),
-          time: moment(postMeta.date).format('h:mm a'),
-          src: path.join(src, "posts", postMarkdownFile),
-          url: path.join("/posts", convertFilename(postMarkdownFile)),
-          category: postMeta.category,
-          blurb: blurb,
-          coverPhoto: postMeta.coverPhoto,
-          coverPhotoAlt: postMeta.coverPhotoAlt,
-          featured: postMeta.featured
-        });
+        var post = getPostMeta(path.join(src, "posts", postMarkdownFile));
+        post.date = moment(post.dateTime).format('MMMM Do, YYYY');
+        post.time =  moment(post.dateTime).format('h:mm a');
+        post.url = path.join("/posts", convertFilename(postMarkdownFile));
+        flatPostList.push(post);
       });
     });
   });
   return flatPostList;
 }
-
-function getBlurb(postMeta) {
-  return truncate(postMeta.__content, 200).replace("<!--more-->", "");
-}
-
 
 function truncate(string, length) {
   if (string.length > length)

@@ -8,16 +8,16 @@ npm-debug.log
 dest/*
 !dest/.gitkeep
 
-tumblr-import/*
+tumblr-import
 
 src/posts/*
 !src/posts/.gitkeep
 
-src/partials/*
-!src/partials/all-posts.hbs
-!src/partials/featured-posts.hbs
-!src/partials/footer.hbs
-!src/partials/header.hbs
+partials/*
+!partials/all-posts.hbs
+!partials/featured-posts.hbs
+!partials/footer.hbs
+!partials/header.hbs
 
 src/pages/*
 !src/pages/blank-post.hbs
@@ -35,3 +35,6 @@ src/fonts/*
 
 src/css/*
 !src/css/quest-log.css
+
+src/api/*
+!src/api/.gitkeep

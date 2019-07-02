@@ -5,9 +5,8 @@ const path = require("path");
 const copydir = require("copy-dir");
 const rootDir = path.join(__dirname, "..");
 
-const srcDir = path.join(rootDir, "src");
-const destDir = path.join(rootDir, "dest");
-
-copydir.sync(srcDir, "./src", {});
-copydir.sync(destDir, "./dest", {});
+copydir.sync(path.join(rootDir, "src"), "./src", {});
+copydir.sync(path.join(rootDir, "dest"), "./dest", {});
+copydir.sync(path.join(rootDir, "partials"), "./partials", {});
 fs.copyFileSync(path.join(rootDir, "quest-log-config.json"), "./quest-log-config.json");
+fs.copyFileSync(path.join(rootDir, ".init-gitignore"), ".gitignore");

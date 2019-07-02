@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 2019-07-01
+
+### Changes
 - fix typo in readme
 - add support for raw links in header nav
+- move partials folder
+- add gitignore to init
+- fix bugs with tumblr importer
 
 ## [3.0.0] - 2019-06-30
 

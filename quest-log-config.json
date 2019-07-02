@@ -5,13 +5,11 @@
   "google-analytics-id": "UA-XXXXXX-XX",
   "pages": [{
       "name": "Blog",
-      "file": "index.html",
-      "showInNav": true
+      "file": "index.html"
     },
     {
       "name": "Sample Page",
-      "file": "sample-page.html",
-      "showInNav": true
+      "file": "sample-page.html"
     }
   ],
   "src": "src",
