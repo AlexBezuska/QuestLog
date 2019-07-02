@@ -133,7 +133,7 @@ function createData() {
     )
   );
   if (config.featureMostRecentPost){
-    posts[posts.length - 1].featured = true;
+    posts[0].featured = true;
   }
   console.log(posts.length, "Posts");
   var data = {};
