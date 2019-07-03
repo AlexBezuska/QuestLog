@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 2019-07-02
+
+- add tags to prev and next
+- add responsive youtube video support to posts
+- add og and twitter meta tags support
+
 
 ## [3.1.1] - 2019-07-01
 

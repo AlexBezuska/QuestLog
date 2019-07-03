@@ -98,6 +98,18 @@ function compilePost(post) {
   createPage(config.postTemplate, data, dest + data.post.url, "post");
 }
 
+function insertYoutubeVideos(postContent, youtubeIDs){
+  return youtubeIDs.reduce((post, youtubeID, i) => {
+    var youtubeHTML = `<div class="youtube-video">
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/${youtubeID}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>`;
+    console.log(youtubeHTML);
+    console.log(`[youtube-${i}]`);
+    console.log(postContent);
+    return post.replace(`[youtube-${i}]`, youtubeHTML);
+  }, postContent);
+}
+
 function insertPartials(templateName) {
   var completeTemplate;
   if (templateName === "post"){
@@ -168,7 +180,8 @@ function addNextPrevToFlatPostList(posts) {
         url: next.url,
         coverPhoto: next.coverPhoto,
         coverPhotAlt: next.coverPhotAlt,
-        blurb: next.blurb
+        blurb: next.blurb,
+        tags: next.tags
       };
     }
     if (i < posts.length - 1) {
@@ -179,7 +192,8 @@ function addNextPrevToFlatPostList(posts) {
         url: prev.url,
         coverPhoto: prev.coverPhoto,
         coverPhotAlt: prev.coverPhotAlt,
-        blurb: prev.blurb
+        blurb: prev.blurb,
+        tags: prev.tags
       };
     }
     list.push(postInfo);
@@ -203,6 +217,11 @@ function returnFlatPostList(tree) {
         post.date = moment(post.dateTime).format('MMMM Do, YYYY');
         post.time =  moment(post.dateTime).format('h:mm a');
         post.url = path.join("/posts", convertFilename(postMarkdownFile));
+        post.__content = marked(post.__content);
+        if (post.youtube){
+          post.__content = insertYoutubeVideos(post.__content, post.youtube);
+          console.log(post.__content);
+        }
         flatPostList.push(post);
       });
     });

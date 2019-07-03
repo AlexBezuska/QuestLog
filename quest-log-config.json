@@ -1,7 +1,12 @@
 {
+  "logo": "/images/logo.png",
+  "icon": "/images/icon.jpg",
+  "ionicon": false,
   "title": "Quest Log",
   "subtitle": "NodeJS CLI + Markdown static blog engine",
   "description": "Quest Log is a NodeJS CLI + Markdown static blog engine that uses standard Jekyll Markdown format, Handlebars for templating, and features convenient command line tools.‬",
+  "shareImage": "/images/share.png",
+  "url": "https://www.npmjs.com/package/quest-log",
   "google-analytics-id": "UA-XXXXXX-XX",
   "pages": [{
       "name": "Blog",

@@ -4,10 +4,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="{{config.description}}">
   <meta name="author" content="{{config.author}}">
   <meta name="generator" content="{{config.generator}}">
-  <title>{{config.title}}</title>
+  <meta property="og:site_name" content="{{config.title}}">
+  <meta name="twitter:site" content="{{config.twitterHandle}}">
+  <meta name="twitter:creator" content="{{config.twitterHandle}}">
+  {{#if post.title}}
+  <!-- this is a post -->
+  <title>{{config.title}} - {{post.title}}</title>
+  <meta property="og:title" content="{{config.title}} - {{post.title}}">
+  <meta name="twitter:title" content="{{config.title}} - {{post.title}}">
+  <meta property="og:url" content="{{config.url}}{{post.url}}">
+  <meta name="description" content="{{post.blurb}}">
+  <meta property="og:description" content="{{post.blurb}}">
+  <meta name="twitter:description" content="{{post.blurb}}">
+  <meta property="og:image" content="{{config.url}}{{post.coverPhoto}}">
+  <meta name="twitter:image" content="{{config.url}}{{post.coverPhoto}}">
+  <meta property="og:type" content="article">
+  {{else}}
+  <!-- this is a page -->
+  <title>{{config.title}} - {{page}}</title>
+  <meta property="og:title" content="{{config.title}}">
+  <meta name="twitter:title" content="{{config.title}}">
+  <meta property="og:url" content="{{config.url}}">
+  <meta name="description" content="{{config.description}}">
+  <meta property="og:description" content="{{config.description}}">
+  <meta name="twitter:description" content="{{config.description}}">
+  <meta property="og:image" content="{{config.url}}{{config.shareImage}}">
+  <meta name="twitter:image" content="{{config.url}}{{config.shareImage}}">
+  {{/if}}
 
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -23,10 +48,20 @@
   <header>
     <nav class="navbar navbar-expand-md navbar-light fixed-top  bg-light">
       <div class="container">
-        <a class="navbar-brand" href="#">
-          <strong class="font-weight-bold"><i class="ion-md-bonfire"></i> {{config.title}}</strong>
-          <p class="small">{{config.subtitle}}</p>
-        </a>
+        {{#if config.logo}}
+          <a href="/" class="logo" alt="{{config.title}} - {{config.subtitle}}">
+            <img src="{{config.logo}}">
+          </a>
+        {{else}}
+          <a class="navbar-brand" href="/">
+            <strong class="font-weight-bold">
+              {{#if config.ionicon}}
+              <i class="{{config.ionicon}}"></i>
+              {{/if}}
+              {{config.title}}</strong>
+            <p class="small">{{config.subtitle}}</p>
+          </a>
+        {{/if}}
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
