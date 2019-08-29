@@ -103,9 +103,6 @@ function insertYoutubeVideos(postContent, youtubeIDs){
     var youtubeHTML = `<div class="youtube-video">
     <iframe width="560" height="315" src="https://www.youtube.com/embed/${youtubeID}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     </div>`;
-    console.log(youtubeHTML);
-    console.log(`[youtube-${i}]`);
-    console.log(postContent);
     return post.replace(`[youtube-${i}]`, youtubeHTML);
   }, postContent);
 }
@@ -220,7 +217,6 @@ function returnFlatPostList(tree) {
         post.__content = marked(post.__content);
         if (post.youtube){
           post.__content = insertYoutubeVideos(post.__content, post.youtube);
-          console.log(post.__content);
         }
         flatPostList.push(post);
       });

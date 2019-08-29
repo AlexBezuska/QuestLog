@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [3.2.1] - 2019-08-29
+
+### Bug Fixes
+- seems like there might be a change in the newer version of marked that broke something in quest-log, force use of marked version 0.6.2
+
+
 ## [3.2.0] - 2019-07-02
 
 - add tags to prev and next

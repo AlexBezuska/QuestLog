@@ -18,11 +18,11 @@ partials/*
 !partials/featured-posts.hbs
 !partials/footer.hbs
 !partials/header.hbs
+!partials/post.hbs
+!partials/blank-post.hbs
 
 src/pages/*
-!src/pages/blank-post.hbs
 !src/pages/blog.hbs
-!src/pages/post.hbs
 !src/pages/sample-page.hbs
 !src/pages/sample-page.json
 

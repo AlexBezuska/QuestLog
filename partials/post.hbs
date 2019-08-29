@@ -1,25 +1,7 @@
 {{>header}}
-
-
-  <div class="row">
-
-    <div class="col-md-12 blog-main">
       <div class="post-page">
-
-        <nav class="blog-pagination">
-          {{#if post.prev}}
-          <a class="btn hvr-grow" href="{{post.prev.url}}" title="Previous post: {{post.prev.title}}"><i class="ion-md-arrow-round-back"></i></a>
-          {{/if}}
-
-          {{#if post.next}}
-          <a class="btn float-right hvr-grow" href="{{post.next.url}}" title="Next post: {{post.next.title}}"><i class="ion-md-arrow-round-forward"></i></a>
-          {{/if}}
-        </nav>
-
         <div role="main" class="post">
-          {{#if post.coverPhoto}}
-          <img src="{{post.coverPhoto}}" alt="{{post.coverPhotoAlt}}" title="{{post.coverPhotoAlt}}" class="post-cover-photo">
-          {{/if}}
+
           <h2 class="post-title">{{post.title}}</h2>
           <p class="post-meta small">{{post.date}}  {{post.time}}</p>
           <div class="post-content">
@@ -29,19 +11,41 @@
 
         <nav class="blog-pagination">
           {{#if post.prev}}
-          <a class="btn hvr-grow" href="{{post.prev.url}}" title="Previous post: {{post.prev.title}}"><i class="ion-md-arrow-round-back"></i></a>
+          <h4>Older Post</h4>
+          <div class="post-container">
+            <div class="row">
+              <div class="col-sm-4">
+                <a href="{{post.prev.url}}" class="blog-post-thumb" alt="{{post.prev.coverPhotoAlt}}" style="background-image: url({{post.prev.coverPhoto}});"></a>
+              </div>
+              <div class="col-sm-8">
+                <a class="blog-post-title" href="{{post.prev.url}}">{{post.prev.title}}</a>
+                <p class="blog-post-meta">{{post.prev.blurb}}</p>
+                <p class="blog-post-meta"><i class="ion-md-pricetags"></i> {{#each post.prev.tags}}<a class="blog-post-tag">{{this}}</a>{{/each}}</p>
+                <p class="blog-post-meta">{{post.prev.date}}</p>
+              </div>
+            </div>
+          </div>
+
           {{/if}}
 
           {{#if post.next}}
-          <a class="btn float-right hvr-grow" href="{{post.next.url}}" title="Next post: {{post.next.title}}"><i class="ion-md-arrow-round-forward"></i></a>
+            <h4>Newer Post</h4>
+          <div class="post-container">
+            <div class="row">
+              <div class="col-sm-4">
+                <a href="{{post.next.url}}" class="blog-post-thumb" alt="{{post.next.coverPhotoAlt}}" style="background-image: url({{post.next.coverPhoto}});"></a>
+              </div>
+              <div class="col-sm-8">
+                <a class="blog-post-title" href="{{post.next.url}}">{{post.next.title}}</a>
+                <p class="blog-post-meta">{{post.next.blurb}}</p>
+                <p class="blog-post-meta"><i class="ion-md-pricetags"></i> {{#each post.next.tags}}<a class="blog-post-tag">{{this}}</a>{{/each}}</p>
+                <p class="blog-post-meta">{{post.next.date}}</p>
+              </div>
+            </div>
+          </div>
           {{/if}}
         </nav>
 
       </div>
-    </div>
-
-
-  </div>
-
 
 {{>footer}}
